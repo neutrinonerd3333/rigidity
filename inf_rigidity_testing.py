@@ -29,7 +29,7 @@ def rigidity_matrix(vertex_config, edges):
         right_ind = embed_dimension * right
         rigidity_mat_row[left_ind:left_ind+embed_dimension] = -edge_displacement
         rigidity_mat_row[right_ind:right_ind+embed_dimension] = edge_displacement
-        
+
         rigidity_matrix_rows.append(rigidity_mat_row)
 
     return numpy.array(rigidity_matrix_rows)
@@ -44,6 +44,8 @@ def inf_dof(vertex_config, edges):
            specified as integer pairs (vertex1, vertex2)
            that index into vertex_config
     """
+    if len(vertex_config) == 0:
+        return 0
 
     embed_dimension = len(vertex_config[0])
     vertex_n = len(vertex_config)
@@ -60,8 +62,8 @@ def inf_dof(vertex_config, edges):
     # dim symmetry group of vertices = dim SO(d - k)
     # dim SO(m) = m+1 choose 2
 
-    euclidean_isometries_dim = scipy.special.binom(embed_dimension + 1, 2)
-    symmetry_group_dim = scipy.special.binom(embed_dimension - configuration_dim, 2)
+    euclidean_isometries_dim = int(scipy.special.binom(embed_dimension + 1, 2))
+    symmetry_group_dim = int(scipy.special.binom(embed_dimension - configuration_dim, 2))
 
     return embed_dimension*vertex_n \
             - rmat_rank \
