@@ -1,8 +1,9 @@
-import unittest
 import math
 import numpy
 import numpy.testing
 from inf_rigidity_testing import rigidity_matrix, inf_dof
+
+import unittest
 
 class RigidityMatrixTest(unittest.TestCase):
     def testPage50Example(self):

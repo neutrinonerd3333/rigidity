@@ -10,8 +10,8 @@ def rigidity_matrix(vertex_config, edges):
     in the order given in edges.
     If C is the mapping from vertices to coordinates,
     the convention is that, for each row (corresponding to edge (u,v),
-    the coordinates in the columns for u are C(v) - C(u);
-    for v, C(u) - C(v).
+    the coordinates in the columns for u are C(u) - C(v);
+    for v, C(v) - C(u).
 
     vertex_config: a 2D array-like of shape n, d, where n is the number of
                    vertices and d is the dimension of the embedding space
