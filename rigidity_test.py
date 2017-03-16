@@ -1,7 +1,7 @@
 import math
 import numpy
 import numpy.testing
-from inf_rigidity_testing import rigidity_matrix, inf_dof
+from rigidity import rigidity_matrix, inf_dof
 
 import unittest
 
