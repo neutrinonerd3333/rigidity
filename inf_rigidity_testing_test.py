@@ -66,9 +66,15 @@ class InfinitesimalDofTest(unittest.TestCase):
                  (4,5),(5,7),(7,6),(6,4)]
         self.assertEqual(inf_dof(cube_config, edges), 6)
 
+    def testNDPoint(self):
+        dim = 79
+        config = [(0,)*dim]
+        edges = []
+        self.assertEqual(inf_dof(config, edges), 0)
+
     def testNDLine(self):
-        config = [(0,)*10, (1,)*10]
-        print(config)
+        dim = 17
+        config = [(0,)*dim, (1,)*dim]
         edges = [(0,1)]
         self.assertEqual(inf_dof(config, edges), 0)
 
