@@ -1,6 +1,25 @@
 import unittest
 import math
-from inf_rigidity_testing import inf_dof
+import numpy
+import numpy.testing
+from inf_rigidity_testing import rigidity_matrix, inf_dof
+
+class RigidityMatrixTest(unittest.TestCase):
+    def testPage50Example(self):
+        """
+        The example from page 50 of the GFALOP e-book.
+        """
+        config = [(0,0),(5,0),(5,5),(0,5)]
+        edges = [(0,1), (1,2), (2,3), (3,0)]
+        expected_rigiditiy_matrix = numpy.array([
+            [-5,  0, 5,  0, 0, 0,  0, 0],
+            [ 0,  0, 0, -5, 0, 5,  0, 0],
+            [ 0,  0, 0,  0, 5, 0, -5, 0],
+            [ 0, -5, 0,  0, 0, 0,  0, 5]
+        ])
+        # numpy array equivalent of assertEqual
+        numpy.testing.assert_allclose(rigidity_matrix(config, edges),
+                                      expected_rigiditiy_matrix)
 
 class InfinitesimalDofTest(unittest.TestCase):
     def testLine(self):

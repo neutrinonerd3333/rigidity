@@ -2,11 +2,37 @@ import numpy
 import numpy.linalg
 import scipy.special
 
-def displacement(start, finish):
+
+def rigidity_matrix(vertex_config, edges):
 	"""
-	The vector difference finish - start.
+	Compute the rigidity matrix as a numpy array.
+	Each row corresponds to the constraint imposed by a single edge,
+	in the order given in edges.
+	If C is the mapping from vertices to coordinates,
+	the convention is that, for each row (corresponding to edge (u,v),
+	the coordinates in the columns for u are C(v) - C(u);
+	for v, C(u) - C(v).
+
+	vertex_config: a 2D array-like of shape n, d, where n is the number of
+				   vertices and d is the dimension of the embedding space
+	edges: an iterable of linkage edges, specified as integer pairs.
 	"""
-	return numpy.array(finish) - numpy.array(start)
+	vertex_vectors = numpy.array(vertex_config)
+	vertex_n, embed_dimension = vertex_vectors.shape
+
+	rigidity_matrix_rows = []
+	for (left, right) in edges:
+		edge_displacement = vertex_vectors[right] - vertex_vectors[left]
+
+		rigidity_mat_row = numpy.zeros(vertex_n * embed_dimension)
+		left_ind = embed_dimension * left
+		right_ind = embed_dimension * right
+		rigidity_mat_row[left_ind:left_ind+embed_dimension] = -edge_displacement
+		rigidity_mat_row[right_ind:right_ind+embed_dimension] = edge_displacement
+		
+		rigidity_matrix_rows.append(rigidity_mat_row)
+
+	return numpy.array(rigidity_matrix_rows)
 
 def inf_dof(vertex_config, edges):
 	"""
@@ -23,19 +49,7 @@ def inf_dof(vertex_config, edges):
 	vertex_n = len(vertex_config)
 	vertex_vectors = numpy.array(vertex_config)
 
-	# we build up the rigidity matrix row by row
-	rigidity_mat_rows = []
-	for (left, right) in edges:
-		edge_displacement = vertex_vectors[right] - vertex_vectors[left]
-
-		rigidity_mat_row = numpy.zeros(vertex_n * embed_dimension)
-		left_ind = embed_dimension * left
-		right_ind = embed_dimension * right
-		rigidity_mat_row[left_ind:left_ind+embed_dimension] = edge_displacement
-		rigidity_mat_row[right_ind:right_ind+embed_dimension] = -edge_displacement
-		
-		rigidity_mat_rows.append(rigidity_mat_row)
-	rmat_rank = numpy.linalg.matrix_rank(rigidity_mat_rows)
+	rmat_rank = numpy.linalg.matrix_rank(rigidity_matrix(vertex_vectors, edges))
 
 	# dimension k of lowest-dimensional hyperplane containing all vertices
 	displacements = vertex_vectors - vertex_vectors[0]
@@ -52,4 +66,4 @@ def inf_dof(vertex_config, edges):
 	return embed_dimension*vertex_n \
 			- rmat_rank \
 			- euclidean_isometries_dim \
-            + symmetry_group_dim
+			+ symmetry_group_dim
