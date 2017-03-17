@@ -47,9 +47,8 @@ def inf_dof(vertex_config, edges):
     if len(vertex_config) == 0:
         return 0
 
-    embed_dimension = len(vertex_config[0])
-    vertex_n = len(vertex_config)
     vertex_vectors = numpy.array(vertex_config)
+    vertex_n, embed_dimension = vertex_vectors.shape
 
     rmat_rank = numpy.linalg.matrix_rank(rigidity_matrix(vertex_vectors, edges))
 

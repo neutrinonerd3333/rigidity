@@ -93,6 +93,7 @@ class InfinitesimalDofTest(unittest.TestCase):
         spoke_config = [(0,0)] + [(math.cos(k * angle), math.sin(k * angle))
                             for k in range(n_spokes)]
         edges = [(0, k + 1) for k in range(n_spokes)]
+
         # minus 1 because uniform rotation is a plane isometry
         self.assertEqual(inf_dof(spoke_config, edges), n_spokes - 1)
 
