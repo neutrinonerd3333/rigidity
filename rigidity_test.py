@@ -1,7 +1,7 @@
 import math
 import numpy
 import numpy.testing
-from rigidity import rigidity_matrix, inf_dof
+from rigidity import rigidity_matrix, inf_dof, is_generically_rigid
 
 import unittest
 
@@ -137,6 +137,40 @@ class InfinitesimalDofTest(unittest.TestCase):
         config = [(0,)*dim, (1,)*dim]
         edges = [(0,1)]
         self.assertEqual(inf_dof(config, edges), 0)
+
+
+class IsGenericallyRigidTest(unittest.TestCase):
+    def test1DLine(self):
+        self.assertTrue(is_generically_rigid(2, [(0,1)], 2))
+
+    def test2DLine(self):
+        self.assertTrue(is_generically_rigid(2, [(0,1)], 2))
+
+    def test2DTriangle(self):
+        self.assertTrue(is_generically_rigid(3, [(0,1), (1,2), (2,0)], 2))
+
+    def test2DTrianglePair(self):
+        """
+        0--1
+        | /|
+        |/ |
+        2--3
+        (rigid in 2D)
+        """
+        edges = [(0, 1), (0, 2), (1, 2), (1, 3), (2, 3)]
+        self.assertTrue(is_generically_rigid(4, edges, 2))
+
+    def test3DTrianglePair(self):
+        """
+        0--1
+        | /|
+        |/ |
+        2--3
+        (not rigid in 3D)
+        """
+        edges = [(0, 1), (0, 2), (1, 2), (1, 3), (2, 3)]
+        self.assertFalse(is_generically_rigid(4, edges, 3))
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -68,3 +68,20 @@ def inf_dof(vertex_config, edges):
             - rmat_rank \
             - euclidean_isometries_dim \
             + symmetry_group_dim
+
+
+def is_generically_rigid(n_vertices, edges, dimensions):
+    """
+    A randomized algorithm to test generic ridigity of a graph in any dimension.
+
+    n_vertices: number of vertices
+    edges: specified as in inf_dof
+    dimensions: embedding dimension
+    """
+    amplification_iterations = 1  # increase for higher probability of success (which is pretty high anyway)
+
+    for iteration in range(amplification_iterations):
+        random_vertex_config = numpy.random.rand(n_vertices, dimensions)
+        if inf_dof(random_vertex_config, edges) == 0:
+            return True
+    return False
